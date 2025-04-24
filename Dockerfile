@@ -1,18 +1,13 @@
-FROM eclipse-temurin:21-jdk AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copie os arquivos de projeto
-COPY mvnw .
-COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
 COPY system.properties .
 
-# Dê permissão de execução ao Maven wrapper
-RUN chmod +x ./mvnw
-
-# Construa o projeto
-RUN ./mvnw package -DskipTests
+# Construa o projeto usando Maven instalado na imagem
+RUN mvn package -DskipTests
 
 # Imagem de runtime
 FROM eclipse-temurin:21-jre
